@@ -206,13 +206,13 @@
                     alignItems: 'center',
                   }}
                 >
-                  {showSlider && (
+                  {showSlider && output.audio?.defaultPlaybackDevice && (
                     <input
                       type="range"
                       min="0"
                       max="100"
                       step="2"
-                      value={output.audio.defaultPlaybackDevice.volume}
+                      value={output.audio.defaultPlaybackDevice?.volume ?? 0}
                       onChange={(e) =>
                         output.audio.setVolume(e.target.valueAsNumber)
                       }
@@ -223,7 +223,7 @@
                     onClick={() => setShowSlider((prev) => !prev)}
                   >
                     <i className="nf nf-seti-audio"></i>
-                    {output.audio.defaultPlaybackDevice.volume}%
+                    {output.audio.defaultPlaybackDevice?.volume ?? 0}%
                   </span>
                 </div>
               )}
