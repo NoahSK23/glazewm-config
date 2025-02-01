@@ -13,7 +13,7 @@ i {
 body {
   color: rgb(205 214 244);
   font-family: ui-monospace, monospace;
-  font-size: 10px;
+  font-size: 11px;
   overflow: hidden;
 }
 
@@ -80,7 +80,6 @@ body,
 .memory,
 .cpu,
 .weather,
-.date,
 .battery {
   margin-right: 10px;
 }
