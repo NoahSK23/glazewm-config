@@ -20,7 +20,7 @@ general:
   config_reload_commands: []
 
   # Whether to automatically focus windows underneath the cursor.
-  focus_follows_cursor: false
+  focus_follows_cursor: true
 
   # Whether to switch back and forth between the previously focused
   # workspace when focusing the current workspace.
@@ -138,6 +138,8 @@ workspaces:
   - name: '8'
   - name: '9'
   - name: '10'
+  - name: '11'
+  - name: '12'
 
 window_rules:
   - commands: ['ignore']
@@ -312,6 +314,10 @@ keybindings:
     bindings: ['alt+9', 'lwin+9']
   - commands: ['focus --workspace 10']
     bindings: ['alt+0', 'lwin+0']
+  - commands: ['focus --workspace 11']
+    bindings: ['alt+-', 'lwin+-']
+  - commands: ['focus --workspace 12']
+    bindings: ['alt+=', 'lwin+=']
 
   # Move the focused window's parent workspace to a monitor in a given
   # direction.
@@ -345,3 +351,7 @@ keybindings:
     bindings: ['alt+shift+9', 'lwin+shift+9']
   - commands: ['move --workspace 10', 'focus --workspace 10']
     bindings: ['alt+shift+0', 'lwin+shift+0']
+  - commands: ['move --workspace 11', 'focus --workspace 11']
+    bindings: ['alt+shift+-', 'lwin+shift+-']
+  - commands: ['move --workspace 12', 'focus --workspace 12']
+    bindings: ['alt+shift+=', 'lwin+shift+=']
