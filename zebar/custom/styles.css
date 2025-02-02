@@ -103,7 +103,7 @@ body,
   padding: 4px 8px;
   color: rgb(205 214 244);
   border: none;
-  border-radius: 2px;
+  border-radius: 4px;
   cursor: pointer;
 
   &.displayed {
@@ -121,7 +121,7 @@ body,
 .paused-button {
   background: rgb(255 255 255 / 15%);
   color: rgb(205 214 244);
-  border-radius: 2px;
+  border-radius: 4px;
   line-height: 1;
   padding: 4px 8px;
   border: 0;
