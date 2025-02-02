@@ -46,6 +46,29 @@
           providers.onOutput(() => setOutput(providers.outputMap));
         }, []);
 
+        function truncateText(text, maxLength) {
+          if (text?.length > maxLength) {
+            return text.substring(0, maxLength) + '...'; // Truncate and add ellipsis
+          }
+          return text; // Return as is if no truncation is needed
+        }
+
+        function getTruncatedMediaText() {
+          const title = output.media?.currentSession?.title || '';
+          const artist = output.media?.currentSession?.artist || '';
+          const combinedText = `${title} ${artist ? `- ${artist}` : ''}`;
+
+          const maxLength = 40; // Set your max length here
+          return truncateText(combinedText, maxLength);
+        }
+
+        function getMediaText() {
+          const title = output.media?.currentSession?.title || '';
+          const artist = output.media?.currentSession?.artist || '';
+          const combinedText = `${title} ${artist ? `- ${artist}` : ''}`;
+          return combinedText;
+        }
+
         // Get icon to show for current network status.
         function getNetworkIcon(networkOutput) {
           switch (networkOutput.defaultInterface?.type) {
@@ -172,32 +195,44 @@
                   ></button>
                 </>
               )}
+
+              {output.media?.currentSession ? (
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <span style={{ marginRight: '10px' }}>
+                    {getTruncatedMediaText()}
+                  </span>
+                  <button
+                    onClick={() => output.media.previous()}
+                    className="tiling-direction nf nf-md-skip_previous"
+                    style={{
+                      marginRight: '10px',
+                    }}
+                  ></button>
+                  <button
+                    onClick={() => output.media.togglePlayPause()}
+                    className="tiling-direction nf nf-md-play_pause"
+                    style={{
+                      marginRight: '10px',
+                    }}
+                  ></button>
+                  <button
+                    onClick={() => output.media.next()}
+                    className="tiling-direction nf nf-md-skip_next"
+                    style={{
+                      marginRight: '10px',
+                    }}
+                  ></button>
+                </div>
+              ) : null}
             </div>
 
             {output.glazewm && (
-              <div className="center">
-                {output.glazewm.focusedContainer.title}
+              <div className="center" style={{ textAlign: 'center' }}>
+                {truncateText(output.glazewm.focusedContainer.title, 80)}
               </div>
             )}
 
             <div className="right">
-              {/*
-                {output.media?.currentSession ? (
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <p style={{ marginRight: '10px' }}>
-                      <small>{output.media.currentSession.title}</small>
-                      </p>
-                      <button
-                      onClick={() => output.media.togglePlayPause()}
-                      className="tiling-direction nf nf-md-play_pause"
-                      style={{
-                        marginRight: '10px',
-                      }}
-                      ></button>
-                      </div>
-                    ) : null}
-                    */}
-
               {output.audio && (
                 <div
                   style={{
@@ -245,17 +280,15 @@
                 </div>
               )}
 
-              {/*
-                {output.cpu && (
-                  <div className="cpu">
-                    <i className="nf nf-oct-cpu"></i>
-                    
-                    <span className={output.cpu.usage > 85 ? 'high-usage' : ''}>
-                      <small>{Math.round(output.cpu.usage)}%</small>
-                      </span>
-                      </div>
-                    )}
-                    */}
+              {output.cpu && (
+                <div className="cpu">
+                  <i className="nf nf-oct-cpu"></i>
+
+                  <span className={output.cpu.usage > 85 ? 'high-usage' : ''}>
+                    <small>{Math.round(output.cpu.usage)}%</small>
+                  </span>
+                </div>
+              )}
 
               {output.battery && (
                 <div className="battery">
