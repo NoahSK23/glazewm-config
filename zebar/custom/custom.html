@@ -271,9 +271,16 @@
               )}
 
               {output.memory && (
-                <div className="memory">
+                <div
+                  className="memory"
+                  style={{
+                    whiteSpace: 'pre-line',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
                   <i className="nf nf-fae-chip"></i>
-                  {`${(output.memory.usedMemory / 1024 ** 3).toFixed(1)}GB / ${(
+                  {`${(output.memory.usedMemory / 1024 ** 3).toFixed(1)}GB\n${(
                     output.memory.totalMemory /
                     1024 ** 3
                   ).toFixed(1)}GB`}
