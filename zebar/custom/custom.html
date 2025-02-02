@@ -26,7 +26,7 @@
         network: { type: 'network' },
         glazewm: { type: 'glazewm' },
         cpu: { type: 'cpu' },
-        date: { type: 'date', formatting: 'EEE MMM d | tt' },
+        date: { type: 'date', formatting: 'EEE MMM d \n tt' },
         battery: { type: 'battery' },
         memory: { type: 'memory' },
         weather: { type: 'weather' },
@@ -45,6 +45,28 @@
         useEffect(() => {
           providers.onOutput(() => setOutput(providers.outputMap));
         }, []);
+
+        const handleScroll = (event) => {
+          if (!output.audio || !output.audio.defaultPlaybackDevice) {
+            console.warn('Audio output not initialized.');
+            return;
+          }
+
+          let currentVolume = output.audio.defaultPlaybackDevice.volume || 0;
+          let volumeStep = 2; // Increase step size for faster volume changes
+
+          // Adjust volume based on scroll direction
+          let newVolume =
+            event.deltaY < 0
+              ? currentVolume + volumeStep
+              : currentVolume - volumeStep;
+
+          // Clamp volume between 0 and 100 (assuming volume is on a 0-100 scale)
+          newVolume = Math.min(100, Math.max(0, newVolume));
+
+          // Round to whole number
+          output.audio.setVolume(Math.round(newVolume));
+        };
 
         function truncateText(text, maxLength) {
           if (text?.length > maxLength) {
@@ -198,8 +220,11 @@
 
               {output.media?.currentSession ? (
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <span style={{ marginRight: '10px', textAlign: 'center' }}>
-                    {getTruncatedMediaText()}
+                  <span
+                    className="title"
+                    style={{ marginRight: '10px', textAlign: 'center' }}
+                  >
+                    {getMediaText()}
                   </span>
                   <button
                     onClick={() => output.media.previous()}
@@ -208,13 +233,23 @@
                       marginRight: '10px',
                     }}
                   ></button>
-                  <button
-                    onClick={() => output.media.togglePlayPause()}
-                    className="tiling-direction nf nf-md-play_pause"
-                    style={{
-                      marginRight: '10px',
-                    }}
-                  ></button>
+                  {output.media.currentSession.isPlaying ? (
+                    <button
+                      onClick={() => output.media.togglePlayPause()}
+                      className="tiling-direction nf nf-md-pause"
+                      style={{
+                        marginRight: '10px',
+                      }}
+                    ></button>
+                  ) : (
+                    <button
+                      onClick={() => output.media.togglePlayPause()}
+                      className="tiling-direction nf nf-md-play"
+                      style={{
+                        marginRight: '10px',
+                      }}
+                    ></button>
+                  )}
                   <button
                     onClick={() => output.media.next()}
                     className="tiling-direction nf nf-md-skip_next"
@@ -228,7 +263,9 @@
 
             {output.glazewm && (
               <div className="center" style={{ textAlign: 'center' }}>
-                {truncateText(output.glazewm.focusedContainer.title, 80)}
+                <span className="title">
+                  {output.glazewm.focusedContainer.title}
+                </span>
               </div>
             )}
 
@@ -240,6 +277,7 @@
                     display: 'flex',
                     alignItems: 'center',
                   }}
+                  onWheel={handleScroll}
                 >
                   {showSlider && output.audio?.defaultPlaybackDevice && (
                     <input
@@ -257,7 +295,11 @@
                     style={{ marginLeft: '5px', cursor: 'pointer' }}
                     onClick={() => setShowSlider((prev) => !prev)}
                   >
-                    <i className="nf nf-seti-audio"></i>
+                    {output.audio.defaultPlaybackDevice?.volume === 0 ? (
+                      <i className="nf nf-md-volume_off"></i>
+                    ) : (
+                      <i className="nf nf-md-volume_high"></i>
+                    )}
                     {output.audio.defaultPlaybackDevice?.volume ?? 0}%
                   </span>
                 </div>
@@ -292,37 +334,46 @@
                   <i className="nf nf-oct-cpu"></i>
 
                   <span className={output.cpu.usage > 85 ? 'high-usage' : ''}>
-                    <small>{Math.round(output.cpu.usage)}%</small>
+                    {Math.round(output.cpu.usage)}%
                   </span>
                 </div>
               )}
 
               {output.battery && (
-                <div className="battery">
+                <div className="battery" style={{ textAlign: 'center' }}>
                   {/* Show icon for whether battery is charging. */}
                   {output.battery.isCharging && (
                     <i className="nf nf-md-power_plug charging-icon"></i>
                   )}
-                  {getBatteryIcon(output.battery)}
-                  {Math.round(output.battery.chargePercent)}%
-                  {
-                    <small style={{ marginLeft: '4px' }}>
-                      {`(${output.battery.state})`}
-                    </small>
-                  }
+                  <div style={{ whiteSpace: 'pre-line' }}>
+                    {getBatteryIcon(output.battery)}
+                    {Math.round(output.battery.chargePercent)}%
+                    {<small>{`\n(${output.battery.state})`}</small>}
+                  </div>
                 </div>
               )}
 
               {output.weather ? (
-                <div className="weather">
+                <div
+                  className="weather"
+                  style={{ display: 'flex', alignItems: 'center' }}
+                >
                   {getWeatherIcon(output.weather)}
-                  {Math.round(output.weather.fahrenheitTemp)}°F
+                  <span>{Math.round(output.weather.fahrenheitTemp)}°F</span>
                 </div>
               ) : (
-                <p>{output.weather}</p>
+                <span>{output.weather}</span>
               )}
               {output.date && (
-                <div className="date">
+                <div
+                  className="date"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    whiteSpace: 'pre-line',
+                  }}
+                >
                   <i className="nf nf-fa-clock"></i>
                   <span>{output.date?.formatted}</span>
                 </div>
