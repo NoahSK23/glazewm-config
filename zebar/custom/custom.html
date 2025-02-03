@@ -121,7 +121,7 @@
             return <i className="nf nf-fa-battery_3"></i>;
           if (batteryOutput.chargePercent > 40)
             return <i className="nf nf-fa-battery_2"></i>;
-          if (batteryOutput.chargePercent > 20)
+          if (batteryOutput.chargePercent > 0)
             return <i className="nf nf-fa-battery_1"></i>;
           return <i className="nf nf-fa-battery_0"></i>;
         }
@@ -154,6 +154,15 @@
             case 'thunder_night':
               return <i className="nf nf-weather-night_alt_lightning"></i>;
           }
+        }
+
+        function getAudioIcon(audioOutput) {
+          if (audioOutput >= 50)
+            return <i className="nf nf-md-volume_high"></i>;
+          if (audioOutput >= 12)
+            return <i className="nf nf-md-volume_medium"></i>;
+          if (audioOutput > 0) return <i className="nf nf-md-volume_low"></i>;
+          return <i className="nf nf-md-volume_off"></i>;
         }
 
         return (
@@ -295,11 +304,7 @@
                     style={{ marginLeft: '5px', cursor: 'pointer' }}
                     onClick={() => setShowSlider((prev) => !prev)}
                   >
-                    {output.audio.defaultPlaybackDevice?.volume === 0 ? (
-                      <i className="nf nf-md-volume_off"></i>
-                    ) : (
-                      <i className="nf nf-md-volume_high"></i>
-                    )}
+                    {getAudioIcon(output.audio.defaultPlaybackDevice?.volume)}
                     {output.audio.defaultPlaybackDevice?.volume ?? 0}%
                   </span>
                 </div>
@@ -340,13 +345,20 @@
               )}
 
               {output.battery && (
-                <div className="battery" style={{ textAlign: 'center' }}>
+                <div
+                  className="battery"
+                  style={{
+                    textAlign: 'center',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
                   {/* Show icon for whether battery is charging. */}
                   {output.battery.isCharging && (
                     <i className="nf nf-md-power_plug charging-icon"></i>
                   )}
+                  {getBatteryIcon(output.battery)}
                   <div style={{ whiteSpace: 'pre-line' }}>
-                    {getBatteryIcon(output.battery)}
                     {Math.round(output.battery.chargePercent)}%
                     {<small>{`\n(${output.battery.state})`}</small>}
                   </div>

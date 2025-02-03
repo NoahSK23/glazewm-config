@@ -37,7 +37,7 @@ body,
 
 .app {
   display: grid;
-  grid-template-columns: 1.5fr 1.5fr auto;
+  grid-template-columns: 1.6fr 1.6fr auto;
   align-items: center;
   height: 100%;
   padding: 4px 1.5vw;
