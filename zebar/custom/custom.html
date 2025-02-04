@@ -23,7 +23,7 @@
       import * as zebar from 'https://esm.sh/zebar@2';
 
       const providers = zebar.createProviderGroup({
-        network: { type: 'network' },
+        network: { type: 'network', refreshInterval: 2500 },
         glazewm: { type: 'glazewm' },
         cpu: { type: 'cpu' },
         date: { type: 'date', formatting: 'EEE MMM d \n tt' },
@@ -90,6 +90,14 @@
           const combinedText = `${title} ${artist ? `- ${artist}` : ''}`;
           return combinedText;
         }
+
+        const convertSpeed = (bytes) => {
+          const bitsPerSecond = bytes * 8; // Convert bytes to bits
+          if (bitsPerSecond >= 1_000_000) {
+            return (bitsPerSecond / 1_000_000).toFixed(2) + ' Mbps';
+          }
+          return (bitsPerSecond / 1_000).toFixed(0) + ' kbps';
+        };
 
         // Get icon to show for current network status.
         function getNetworkIcon(networkOutput) {
@@ -310,10 +318,46 @@
                 </div>
               )}
 
+              {/*
+                {output.network && (
+                  <div className="network">
+                    {getNetworkIcon(output.network)}
+                    <small>{output.network.defaultGateway?.ssid}</small>
+                    </div>
+                  )}
+                    */}
+
               {output.network && (
-                <div className="network">
+                <div
+                  className="network"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
                   {getNetworkIcon(output.network)}
-                  <small>{output.network.defaultGateway?.ssid}</small>
+                  <div
+                    style={{
+                      marginLeft: '8px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                    }}
+                  >
+                    <div>
+                      <i
+                        className="nf nf-md-download"
+                        style={{ fontSize: '12px' }}
+                      ></i>
+                      {convertSpeed(output.network.traffic.received.bytes)}
+                    </div>
+                    <div>
+                      <i
+                        className="nf nf-md-upload"
+                        style={{ fontSize: '12px' }}
+                      ></i>
+                      {convertSpeed(output.network.traffic.transmitted.bytes)}
+                    </div>
+                  </div>
                 </div>
               )}
 
