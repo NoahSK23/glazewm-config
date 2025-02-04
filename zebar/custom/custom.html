@@ -94,7 +94,7 @@
         const convertSpeed = (bytes) => {
           const bitsPerSecond = bytes * 8; // Convert bytes to bits
           if (bitsPerSecond >= 1_000_000) {
-            return (bitsPerSecond / 1_000_000).toFixed(2) + ' Mbps';
+            return (bitsPerSecond / 1_000_000).toFixed(1) + ' Mbps';
           }
           return (bitsPerSecond / 1_000).toFixed(0) + ' kbps';
         };
