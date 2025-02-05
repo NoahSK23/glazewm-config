@@ -436,7 +436,9 @@
                   <span>{Math.round(output.weather.fahrenheitTemp)}°F</span>
                 </div>
               ) : (
-                <span>{output.weather}</span>
+                <span className="weather" style={{ marginLeft: '10px' }}>
+                  N/A
+                </span>
               )}
               {output.date && (
                 <div
@@ -448,7 +450,7 @@
                     whiteSpace: 'pre-line',
                   }}
                 >
-                  <i className="nf nf-fa-clock"></i>
+                  <i className="nf nf-md-calendar_month"></i>
                   <span>{output.date?.formatted}</span>
                 </div>
               )}
