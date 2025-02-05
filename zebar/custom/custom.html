@@ -23,7 +23,7 @@
       import * as zebar from 'https://esm.sh/zebar@2';
 
       const providers = zebar.createProviderGroup({
-        network: { type: 'network', refreshInterval: 2500 },
+        network: { type: 'network', refreshInterval: 2000 },
         glazewm: { type: 'glazewm' },
         cpu: { type: 'cpu' },
         date: { type: 'date', formatting: 'EEE MMM d \n tt' },
@@ -85,6 +85,7 @@
         }
 
         function getMediaText() {
+          if (!output.media?.currentSession) return 'Nothing is playing';
           const title = output.media?.currentSession?.title || '';
           const artist = output.media?.currentSession?.artist || '';
           const combinedText = `${title} ${artist ? `- ${artist}` : ''}`;
@@ -94,9 +95,19 @@
         const convertSpeed = (bytes) => {
           const bitsPerSecond = bytes * 8; // Convert bytes to bits
           if (bitsPerSecond >= 1_000_000) {
-            return (bitsPerSecond / 1_000_000).toFixed(1) + ' Mbps';
+            return (
+              <span>
+                {(bitsPerSecond / 1_000_000).toFixed(1)}
+                <small> Mb/s</small>
+              </span>
+            );
           }
-          return (bitsPerSecond / 1_000).toFixed(0) + ' kbps';
+          return (
+            <span>
+              {(bitsPerSecond / 1_000).toFixed(0)}
+              <small> Kb/s</small>
+            </span>
+          );
         };
 
         // Get icon to show for current network status.
@@ -235,7 +246,7 @@
                 </>
               )}
 
-              {output.media?.currentSession ? (
+              {output.media ? (
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <span
                     className="title"
@@ -250,7 +261,7 @@
                       marginRight: '10px',
                     }}
                   ></button>
-                  {output.media.currentSession.isPlaying ? (
+                  {output.media?.currentSession?.isPlaying ? (
                     <button
                       onClick={() => output.media.togglePlayPause()}
                       className="tiling-direction nf nf-md-pause"
@@ -338,7 +349,6 @@
                   {getNetworkIcon(output.network)}
                   <div
                     style={{
-                      marginLeft: '8px',
                       display: 'flex',
                       flexDirection: 'column',
                     }}
@@ -364,17 +374,25 @@
               {output.memory && (
                 <div
                   className="memory"
-                  style={{
-                    whiteSpace: 'pre-line',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
+                  style={{ display: 'flex', alignItems: 'center' }}
                 >
                   <i className="nf nf-fae-chip"></i>
-                  {`${(output.memory.usedMemory / 1024 ** 3).toFixed(1)}GB\n${(
-                    output.memory.totalMemory /
-                    1024 ** 3
-                  ).toFixed(1)}GB`}
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <div>
+                      {(output.memory.usedMemory / 1024 ** 3).toFixed(1)}
+                      <small>GB</small>
+                    </div>
+                    <div>
+                      {(output.memory.totalMemory / 1024 ** 3).toFixed(1)}
+                      <small>GB</small>
+                    </div>
+                  </div>
                 </div>
               )}
 
