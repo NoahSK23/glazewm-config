@@ -89,10 +89,6 @@ body,
   margin-right: 5px;
 }
 
-.battery i {
-  color: #a6e3a1;
-}
-
 .memory i {
   color: #fab387;
 }
@@ -189,4 +185,12 @@ body,
   white-space: normal;
 
   line-clamp: 2; /* Compatibility */
+}
+
+.green i {
+  color: #a6e3a1 !important;
+}
+
+.red i {
+  color: #f38ba8 !important;
 }

@@ -431,7 +431,13 @@
                   {output.battery.isCharging && (
                     <i className="nf nf-md-power_plug charging-icon"></i>
                   )}
-                  {getBatteryIcon(output.battery)}
+                  <span
+                    className={
+                      output.battery.chargePercent < 21 ? 'red' : 'green'
+                    }
+                  >
+                    {getBatteryIcon(output.battery)}
+                  </span>
                   <div style={{ whiteSpace: 'pre-line' }}>
                     {Math.round(output.battery.chargePercent)}%
                     {<small>{`\n(${output.battery.state})`}</small>}
