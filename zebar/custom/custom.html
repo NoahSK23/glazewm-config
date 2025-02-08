@@ -26,7 +26,7 @@
         network: { type: 'network', refreshInterval: 2000 },
         glazewm: { type: 'glazewm' },
         cpu: { type: 'cpu' },
-        date: { type: 'date', formatting: 'EEE MMM d \n tt' },
+        date: { type: 'date', formatting: 'EEE, MMM d \n tt' },
         battery: { type: 'battery', refreshInterval: 5000 },
         memory: { type: 'memory' },
         weather: { type: 'weather' },
@@ -257,8 +257,12 @@
                   <button
                     onClick={() => output.media.previous()}
                     className="tiling-direction nf nf-md-skip_previous"
+                    disabled={!output.media?.currentSession}
                     style={{
                       marginRight: '4px',
+                      cursor: !output.media?.currentSession
+                        ? 'default'
+                        : 'pointer',
                     }}
                   ></button>
                   {output.media?.currentSession?.isPlaying ? (
@@ -273,16 +277,24 @@
                     <button
                       onClick={() => output.media.togglePlayPause()}
                       className="tiling-direction nf nf-md-play"
+                      disabled={!output.media?.currentSession}
                       style={{
                         marginRight: '4px',
+                        cursor: !output.media?.currentSession
+                          ? 'default'
+                          : 'pointer',
                       }}
                     ></button>
                   )}
                   <button
                     onClick={() => output.media.next()}
                     className="tiling-direction nf nf-md-skip_next"
+                    disabled={!output.media?.currentSession}
                     style={{
                       marginRight: '4px',
+                      cursor: !output.media?.currentSession
+                        ? 'default'
+                        : 'pointer',
                     }}
                   ></button>
                 </div>
@@ -291,7 +303,7 @@
 
             {output.glazewm && (
               <div className="center" style={{ textAlign: 'center' }}>
-                <span className="title">
+                <span className="title" style={{ color: '#f5e0dc' }}>
                   {output.glazewm.focusedContainer.title}
                 </span>
               </div>
@@ -300,8 +312,8 @@
             <div className="right">
               {output.audio && (
                 <div
+                  className="audio"
                   style={{
-                    marginRight: '10px',
                     display: 'flex',
                     alignItems: 'center',
                   }}
