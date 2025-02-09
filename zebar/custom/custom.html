@@ -78,7 +78,7 @@
         function getTruncatedMediaText() {
           const title = output.media?.currentSession?.title || '';
           const artist = output.media?.currentSession?.artist || '';
-          const combinedText = `${title} ${artist ? `- ${artist}` : ''}`;
+          const combinedText = `${title} ${artist ? `— ${artist}` : ''}`;
 
           const maxLength = 40; // Set your max length here
           return truncateText(combinedText, maxLength);
