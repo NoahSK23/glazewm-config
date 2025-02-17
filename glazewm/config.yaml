@@ -199,14 +199,14 @@ keybindings:
     bindings: ['lwin+shift+j', 'lwin+shift+down']
 
   # Resize focused window by a percentage or pixel amount.
-  - commands: ['resize --width -2%']
-    bindings: ['lwin+u']
-  - commands: ['resize --width +2%']
-    bindings: ['lwin+p']
-  - commands: ['resize --height +2%']
-    bindings: ['lwin+o']
-  - commands: ['resize --height -2%']
-    bindings: ['lwin+i']
+  # - commands: ['resize --width -2%']
+  #   bindings: ['lwin+u']
+  # - commands: ['resize --width +2%']
+  #   bindings: ['lwin+p']
+  # - commands: ['resize --height +2%']
+  #   bindings: ['lwin+o']
+  # - commands: ['resize --height -2%']
+  #   bindings: ['lwin+i']
 
   # As an alternative to the resize keybindings above, resize mode enables
   # resizing via arrow keys or HJKL. The binding mode is defined above with
