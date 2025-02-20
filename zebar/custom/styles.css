@@ -39,7 +39,7 @@ body,
 
 .app {
   display: grid;
-  grid-template-columns: 2.1fr 1.5fr auto;
+  grid-template-columns: 2.1fr auto auto;
   align-items: center;
   height: 100%;
   padding: 4px 1.5vw;
