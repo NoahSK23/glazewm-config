@@ -278,14 +278,23 @@ keybindings:
   - commands: ['shell-exec explorer']
     bindings: ['lwin+e']
 
-  # Launch Chrome.
-  - commands: ['shell-exec chrome']
+  # Launch Chrome with default profile.
+  - commands: ['shell-exec chrome --profile-directory=Default']
     bindings: ['lwin+b']
 
   # Lauch Chrome (incognito).
   - commands:
-      ['shell-exec chrome --incognito --new-window https://www.google.com']
+      [
+        'shell-exec chrome --profile-directory=Default --incognito --new-window https://www.google.com',
+      ]
     bindings: ['lwin+shift+b']
+
+  # Launch VS Code.
+  - commands:
+      [
+        'shell-exec C:\Users\Noah\AppData\Local\Programs\Microsoft VS Code\Code.exe',
+      ]
+    bindings: ['lwin+c']
 
   # Focus the next/previous active workspace defined in `workspaces` config.
   - commands: ['focus --next-active-workspace']
