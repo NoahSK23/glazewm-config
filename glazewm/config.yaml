@@ -280,14 +280,14 @@ keybindings:
 
   # Launch Chrome with default profile.
   - commands: ['shell-exec chrome --profile-directory=Default']
-    bindings: ['lwin+b']
+    bindings: ['lwin+b', 'lwin+n']
 
   # Lauch Chrome (incognito).
   - commands:
       [
         'shell-exec chrome --profile-directory=Default --incognito --new-window https://www.google.com',
       ]
-    bindings: ['lwin+shift+b']
+    bindings: ['lwin+shift+b', 'lwin+shift+n']
 
   # Launch VS Code.
   - commands:
