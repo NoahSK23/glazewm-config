@@ -274,8 +274,8 @@ keybindings:
   - commands: ['shell-exec wt -p Ubuntu']
     bindings: ['lwin+shift+enter']
 
-  # Launch Windows Explorer.
-  - commands: ['shell-exec explorer']
+  # Launch Files, an explorer replacement.
+  - commands: ['shell-exec files-stable.exe']
     bindings: ['lwin+e']
 
   # Launch Chrome with default profile.
