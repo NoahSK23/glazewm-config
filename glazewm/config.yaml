@@ -270,7 +270,7 @@ keybindings:
   - commands: ['shell-exec wt']
     bindings: ['lwin+enter']
 
-  #Launch Ubuntu wt Profile
+  # Launch Ubuntu wt Profile
   - commands: ['shell-exec wt -p Ubuntu']
     bindings: ['lwin+shift+enter']
 
@@ -289,11 +289,8 @@ keybindings:
       ]
     bindings: ['lwin+shift+b', 'lwin+shift+n']
 
-  # Launch VS Code.
-  - commands:
-      [
-        'shell-exec C:\Users\Noah\AppData\Local\Programs\Microsoft VS Code\Code.exe',
-      ]
+  # Launch Neovim.
+  - commands: ['shell-exec wt new-tab pwsh -NoExit -c nvim']
     bindings: ['lwin+c']
 
   # Focus the next/previous active workspace defined in `workspaces` config.
