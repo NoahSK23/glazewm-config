@@ -5,7 +5,7 @@ general:
   startup_commands:
     [
       'shell-exec zebar',
-      'shell-exec C:\Users\Noah\AppData\Local\Programs\tacky-borders\tacky-borders.exe',
+      'shell-exec %localappdata%\Programs\tacky-borders\tacky-borders.exe',
     ]
 
   # Commands to run just before the WM is shutdown.
