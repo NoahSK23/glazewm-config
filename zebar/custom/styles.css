@@ -86,10 +86,6 @@ body,
   margin-right: 15px;
 }
 
-.battery {
-  margin-right: 5px;
-}
-
 .memory i {
   color: #fab387;
 }
@@ -167,13 +163,14 @@ body,
 
 .battery {
   position: relative;
+  margin-right: 10px;
 }
 
 .battery .charging-icon {
   position: absolute;
-  font-size: 10px;
-  left: -8px;
-  top: 3px;
+  font-size: 9px;
+  left: -9px;
+  top: -1px;
 }
 
 .title {

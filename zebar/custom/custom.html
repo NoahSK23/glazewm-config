@@ -419,18 +419,13 @@
               )}
 
               {output.battery && (
-                <div
-                  className="battery"
-                  style={{
-                    textAlign: 'center',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
+                <div className="battery">
                   {/* Show icon for whether battery is charging. */}
-                  {output.battery.isCharging && (
+                  {output.battery.state === 'charging' ? (
+                    <i className="nf nf-md-lightning_bolt charging-icon"></i>
+                  ) : output.battery.state === 'full' ? (
                     <i className="nf nf-md-power_plug charging-icon"></i>
-                  )}
+                  ) : null}
                   <span
                     className={
                       output.battery.chargePercent < 21 ? 'red' : 'green'
@@ -438,10 +433,7 @@
                   >
                     {getBatteryIcon(output.battery)}
                   </span>
-                  <div style={{ whiteSpace: 'pre-line' }}>
-                    {Math.round(output.battery.chargePercent)}%
-                    {<small>{`\n(${output.battery.state})`}</small>}
-                  </div>
+                  {Math.round(output.battery.chargePercent)}%
                 </div>
               )}
 
