@@ -279,18 +279,21 @@ keybindings:
     bindings: ['lwin+e']
 
   # Launch Chrome with default profile.
-  - commands: ['shell-exec chrome --profile-directory=Default']
+  - commands: ['shell-exec brave --profile-directory=Default']
     bindings: ['lwin+b', 'lwin+n']
 
   # Lauch Chrome (incognito).
   - commands:
       [
-        'shell-exec chrome --profile-directory=Default --incognito --new-window https://www.google.com',
+        'shell-exec brave --profile-directory=Default --incognito --new-window https://www.google.com',
       ]
     bindings: ['lwin+shift+b', 'lwin+shift+n']
 
-  # Launch Neovim.
-  - commands: ['shell-exec wt new-tab pwsh -NoExit -c nvim']
+  # Launch ChatGPT (Brave App).
+  - commands:
+      [
+        'shell-exec C:\Program Files\BraveSoftware\Brave-Browser\Application\chrome_proxy.exe --profile-directory=Default --app-id=cadlkienfkclaiaibeoongdcgmdikeeg',
+      ]
     bindings: ['lwin+c']
 
   # Focus the next/previous active workspace defined in `workspaces` config.
