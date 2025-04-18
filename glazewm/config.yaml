@@ -336,9 +336,9 @@ keybindings:
   # direction.
   - commands: ['move --prev-active-workspace', 'focus --prev-active-workspace']
     bindings: ['lwin+shift+a']
-  - commands: ['move-workspace --direction right']
-    bindings: ['lwin+shift+f']
   - commands: ['move-workspace --direction up']
+    bindings: ['lwin+shift+f']
+  - commands: ['move-workspace --direction down']
     bindings: ['lwin+shift+d']
   - commands: ['move --next-active-workspace', 'focus --next-active-workspace']
     bindings: ['lwin+shift+s']
