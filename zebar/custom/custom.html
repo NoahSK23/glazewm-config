@@ -93,17 +93,17 @@
         }
 
         const convertSpeed = (bytes) => {
-          const bitsPerSecond = bytes * 8; // Convert bytes to bits
+          const bitsPerSecond = bytes * 8;
           if (bitsPerSecond >= 1_000_000) {
             return (
-              <span>
+              <span className="speed-value">
                 {(bitsPerSecond / 1_000_000).toFixed(1)}
                 <small> Mb/s</small>
               </span>
             );
           }
           return (
-            <span>
+            <span className="speed-value">
               {(bitsPerSecond / 1_000).toFixed(0)}
               <small> Kb/s</small>
             </span>
@@ -353,29 +353,21 @@
               {output.network && (
                 <div
                   className="network"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
+                  style={{ display: 'flex', alignItems: 'center' }}
                 >
                   {getNetworkIcon(output.network)}
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                    }}
-                  >
-                    <div>
+                  <div className="speed-container">
+                    <div className="speed-row">
                       <i
                         className="nf nf-md-download"
-                        style={{ fontSize: '12px' }}
+                        style={{ fontSize: '12px', margin: 0 }}
                       ></i>
                       {convertSpeed(output.network.traffic.received.bytes)}
                     </div>
-                    <div>
+                    <div className="speed-row">
                       <i
                         className="nf nf-md-upload"
-                        style={{ fontSize: '12px' }}
+                        style={{ fontSize: '12px', margin: 0 }}
                       ></i>
                       {convertSpeed(output.network.traffic.transmitted.bytes)}
                     </div>

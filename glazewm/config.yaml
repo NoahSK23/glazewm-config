@@ -33,7 +33,7 @@ general:
     # Trigger for cursor jump:
     # - 'monitor_focus': Jump when focus changes between monitors.
     # - 'window_focus': Jump when focus changes between windows.
-    trigger: 'monitor_focus'
+    trigger: 'window_focus'
 
   # How windows should be hidden when switching workspaces.
   # - 'cloak': Recommended. Hides windows with no animation.
@@ -52,14 +52,14 @@ gaps:
   scale_with_dpi: true
 
   # Gap between adjacent windows.
-  inner_gap: '6px'
+  inner_gap: '3px'
 
   # Gap between windows and the screen edge.
   outer_gap:
-    top: '44px'
-    right: '6px'
-    bottom: '6px'
-    left: '6px'
+    top: '41px'
+    right: '4px'
+    bottom: '4px'
+    left: '4px'
 
 window_effects:
   # Visual effects to apply to the focused window.
@@ -278,15 +278,12 @@ keybindings:
   - commands: ['shell-exec explorer.exe']
     bindings: ['lwin+e']
 
-  # Launch Chrome with default profile.
-  - commands: ['shell-exec brave --profile-directory=Default']
+  # Launch Zen with default profile.
+  - commands: ['shell-exec Zen']
     bindings: ['lwin+b', 'lwin+n']
 
-  # Lauch Chrome (incognito).
-  - commands:
-      [
-        'shell-exec brave --profile-directory=Default --incognito --new-window https://www.google.com',
-      ]
+  # Launch Zen (incognito).
+  - commands: ['shell-exec zen -private-window https://www.google.com']
     bindings: ['lwin+shift+b', 'lwin+shift+n']
 
   # Launch ChatGPT (Brave App).
