@@ -160,6 +160,7 @@ window_rules:
         window_class: { regex: 'HwndWrapper' }
       - window_process: { equals: 'Lenovo Legion Toolkit' }
         window_title: { regex: '' }
+      - window_process: { equals: 'Overwatch' }
   - commands: ['set-floating']
     match:
       - window_process: { equals: 'mpv' }
