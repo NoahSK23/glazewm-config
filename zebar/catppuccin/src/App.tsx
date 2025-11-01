@@ -1,0 +1,467 @@
+import { useEffect, useState, type WheelEventHandler } from 'react';
+import * as zebar from 'zebar';
+import './App.css';
+export default function App() {
+  const providers = zebar.createProviderGroup({
+    network: { type: 'network', refreshInterval: 2000 },
+    glazewm: { type: 'glazewm' },
+    cpu: { type: 'cpu' },
+    date: { type: 'date', formatting: 'EEE, MMM d \n tt' },
+    battery: { type: 'battery', refreshInterval: 5000 },
+    memory: { type: 'memory' },
+    weather: { type: 'weather' },
+    media: { type: 'media' },
+    audio: { type: 'audio' },
+    systray: { type: 'systray' },
+  });
+  const [output, setOutput] = useState(providers.outputMap);
+  const [showSlider, setShowSlider] = useState(false);
+  const [isSystrayCollapsed, setIsSystrayCollapsed] = useState(true);
+  // console.log('OUTPUT: ', output);
+
+  useEffect(() => {
+    providers.onOutput(() => setOutput(providers.outputMap));
+  }, [providers]);
+
+  const handleScroll: WheelEventHandler<HTMLDivElement> = (event) => {
+    if (!output.audio || !output.audio.defaultPlaybackDevice) {
+      console.warn('Audio output not initialized.');
+      return;
+    }
+
+    const currentVolume = output.audio.defaultPlaybackDevice.volume || 0;
+    const volumeStep = 2; // Increase step size for faster volume changes
+
+    // Adjust volume based on scroll direction
+    let newVolume =
+      event.deltaY < 0
+        ? currentVolume + volumeStep
+        : currentVolume - volumeStep;
+
+    // Clamp volume between 0 and 100 (assuming volume is on a 0-100 scale)
+    newVolume = Math.min(100, Math.max(0, newVolume));
+
+    // Round to whole number
+    output.audio.setVolume(Math.round(newVolume));
+  };
+
+  // function truncateText(text: string, maxLength: number) {
+  //   if (text?.length > maxLength) {
+  //     return text.substring(0, maxLength) + '...'; // Truncate and add ellipsis
+  //   }
+  //   return text; // Return as is if no truncation is needed
+  // }
+
+  // function getTruncatedMediaText() {
+  //   const title = output.media?.currentSession?.title || '';
+  //   const artist = output.media?.currentSession?.artist || '';
+  //   const combinedText = `${title} ${artist ? `— ${artist}` : ''}`;
+
+  //   const maxLength = 40; // Set your max length here
+  //   return truncateText(combinedText, maxLength);
+  // }
+
+  function getMediaText() {
+    if (!output.media?.currentSession) return 'Nothing is playing';
+    const title = output.media?.currentSession?.title || '';
+    const artist = output.media?.currentSession?.artist || '';
+    const combinedText = `${title} ${artist ? `- ${artist}` : ''}`;
+    return combinedText;
+  }
+
+  const convertSpeed = (bytes: number | undefined) => {
+    const bitsPerSecond = (bytes || 0) * 8;
+    if (bitsPerSecond >= 1_000_000) {
+      return (
+        <span className="speed-value">
+          {(bitsPerSecond / 1_000_000).toFixed(1)}
+          <small> Mb/s</small>
+        </span>
+      );
+    }
+    return (
+      <span className="speed-value">
+        {(bitsPerSecond / 1_000).toFixed(0)}
+        <small> Kb/s</small>
+      </span>
+    );
+  };
+
+  // Get icon to show for current network status.
+  function getNetworkIcon(networkOutput: zebar.NetworkOutput) {
+    if (!networkOutput.defaultGateway?.signalStrength) {
+      return <i className="nf nf-md-wifi_strength_off_outline"></i>;
+    }
+    switch (networkOutput.defaultInterface?.type) {
+      case 'ethernet':
+        return <i className="nf nf-md-ethernet_cable"></i>;
+      case 'wifi':
+        if (networkOutput.defaultGateway?.signalStrength >= 80) {
+          return <i className="nf nf-md-wifi_strength_4"></i>;
+        } else if (networkOutput.defaultGateway?.signalStrength >= 65) {
+          return <i className="nf nf-md-wifi_strength_3"></i>;
+        } else if (networkOutput.defaultGateway?.signalStrength >= 40) {
+          return <i className="nf nf-md-wifi_strength_2"></i>;
+        } else if (networkOutput.defaultGateway?.signalStrength >= 25) {
+          return <i className="nf nf-md-wifi_strength_1"></i>;
+        } else {
+          return <i className="nf nf-md-wifi_strength_outline"></i>;
+        }
+      default:
+        return <i className="nf nf-md-wifi_strength_off_outline"></i>;
+    }
+  }
+
+  // Get icon to show for how much of the battery is charged.
+  function getBatteryIcon(batteryOutput: zebar.BatteryOutput) {
+    if (batteryOutput.chargePercent > 90)
+      return <i className="nf nf-fa-battery_4"></i>;
+    if (batteryOutput.chargePercent > 70)
+      return <i className="nf nf-fa-battery_3"></i>;
+    if (batteryOutput.chargePercent > 40)
+      return <i className="nf nf-fa-battery_2"></i>;
+    if (batteryOutput.chargePercent > 0)
+      return <i className="nf nf-fa-battery_1"></i>;
+    return <i className="nf nf-fa-battery_0"></i>;
+  }
+
+  // Get icon to show for current weather status.
+  function getWeatherIcon(weatherOutput: zebar.WeatherOutput) {
+    switch (weatherOutput.status) {
+      case 'clear_day':
+        return <i className="nf nf-weather-day_sunny"></i>;
+      case 'clear_night':
+        return <i className="nf nf-weather-night_clear"></i>;
+      case 'cloudy_day':
+        return <i className="nf nf-weather-day_cloudy"></i>;
+      case 'cloudy_night':
+        return <i className="nf nf-weather-night_alt_cloudy"></i>;
+      case 'light_rain_day':
+        return <i className="nf nf-weather-day_sprinkle"></i>;
+      case 'light_rain_night':
+        return <i className="nf nf-weather-night_alt_sprinkle"></i>;
+      case 'heavy_rain_day':
+        return <i className="nf nf-weather-day_rain"></i>;
+      case 'heavy_rain_night':
+        return <i className="nf nf-weather-night_alt_rain"></i>;
+      case 'snow_day':
+        return <i className="nf nf-weather-day_snow"></i>;
+      case 'snow_night':
+        return <i className="nf nf-weather-night_alt_snow"></i>;
+      case 'thunder_day':
+        return <i className="nf nf-weather-day_lightning"></i>;
+      case 'thunder_night':
+        return <i className="nf nf-weather-night_alt_lightning"></i>;
+    }
+  }
+
+  function getAudioIcon(audioOutput: zebar.AudioDevice['volume'] | undefined) {
+    if (audioOutput === undefined)
+      return <i className="nf nf-md-volume_off"></i>;
+    if (output.audio?.defaultPlaybackDevice?.isMuted)
+      return <i className="nf nf-md-volume_off"></i>;
+    if (audioOutput >= 50) return <i className="nf nf-md-volume_high"></i>;
+    if (audioOutput >= 12) return <i className="nf nf-md-volume_medium"></i>;
+    return <i className="nf nf-md-volume_low"></i>;
+  }
+
+  return (
+    <div className="app">
+      <div className="left">
+        <i className="logo nf nf-custom-windows"></i>
+        {output.glazewm && (
+          <div className="workspaces">
+            {output.glazewm.currentWorkspaces.map((workspace) => (
+              <button
+                className={`workspace ${workspace.hasFocus && 'focused'} ${
+                  workspace.isDisplayed && 'displayed'
+                }`}
+                onClick={() =>
+                  output.glazewm?.runCommand(
+                    `focus --workspace ${workspace.name}`
+                  )
+                }
+                key={workspace.name}
+              >
+                {workspace.displayName ?? workspace.name}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div style={{ marginRight: '4px' }}>|</div>
+        {output.glazewm && (
+          <>
+            {output.glazewm.isPaused && (
+              <button
+                className="paused-button"
+                onClick={() => output.glazewm?.runCommand('wm-toggle-pause')}
+              >
+                PAUSED
+              </button>
+            )}
+            {output.glazewm.bindingModes.map((bindingMode) => (
+              <button
+                className="binding-mode"
+                key={bindingMode.name}
+                onClick={() =>
+                  output.glazewm?.runCommand(
+                    `wm-disable-binding-mode --name ${bindingMode.name}`
+                  )
+                }
+              >
+                {bindingMode.displayName ?? bindingMode.name}
+              </button>
+            ))}
+
+            <button
+              className={`tiling-direction nf ${
+                output.glazewm.tilingDirection === 'horizontal'
+                  ? 'nf-md-swap_horizontal'
+                  : 'nf-md-swap_vertical'
+              }`}
+              onClick={() =>
+                output.glazewm?.runCommand('toggle-tiling-direction')
+              }
+            ></button>
+          </>
+        )}
+
+        {output.media ? (
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <span
+              className="title"
+              style={{ marginRight: '10px', textAlign: 'center' }}
+            >
+              {getMediaText()}
+            </span>
+            <button
+              onClick={() => output.media?.previous()}
+              className="tiling-direction nf nf-md-skip_previous"
+              disabled={!output.media?.currentSession}
+              style={{
+                marginRight: '4px',
+                cursor: !output.media?.currentSession ? 'default' : 'pointer',
+              }}
+            ></button>
+            {output.media?.currentSession?.isPlaying ? (
+              <button
+                onClick={() => output.media?.togglePlayPause()}
+                className="tiling-direction nf nf-md-pause"
+                style={{
+                  marginRight: '4px',
+                }}
+              ></button>
+            ) : (
+              <button
+                onClick={() => output.media?.togglePlayPause()}
+                className="tiling-direction nf nf-md-play"
+                disabled={!output.media?.currentSession}
+                style={{
+                  marginRight: '4px',
+                  cursor: !output.media?.currentSession ? 'default' : 'pointer',
+                }}
+              ></button>
+            )}
+            <button
+              onClick={() => output.media?.next()}
+              className="tiling-direction nf nf-md-skip_next"
+              disabled={!output.media?.currentSession}
+              style={{
+                marginRight: '4px',
+                cursor: !output.media?.currentSession ? 'default' : 'pointer',
+              }}
+            ></button>
+          </div>
+        ) : null}
+      </div>
+
+      {/*output.glazewm && (
+              <div className="center" style={{ textAlign: 'center' }}>
+                <span className="title" style={{ color: '#f5e0dc' }}>
+                  {output.glazewm.focusedContainer.title}
+                </span>
+              </div>
+            )*/}
+
+      <div className="right">
+        {output.systray && (
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            {!isSystrayCollapsed &&
+              output.systray.icons.map((app) => (
+                <button
+                  key={app.id}
+                  className="systray-button"
+                  title={app.tooltip}
+                  style={{ display: 'flex', alignItems: 'center' }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    output.systray?.onLeftClick(app.id);
+                  }}
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    output.systray?.onRightClick(app.id);
+                  }}
+                >
+                  <img src={`${app.iconUrl}`} alt={app.tooltip} />
+                </button>
+              ))}
+          </div>
+        )}
+
+        <button
+          className={`tiling-direction nf nf-md-chevron_${
+            isSystrayCollapsed ? 'left' : 'right'
+          }`}
+          style={{ marginRight: '4px' }}
+          onClick={() => setIsSystrayCollapsed(!isSystrayCollapsed)}
+        ></button>
+
+        {output.audio && (
+          <div
+            className="audio"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+            }}
+            onWheel={handleScroll}
+          >
+            {showSlider && output.audio?.defaultPlaybackDevice && (
+              <input
+                type="range"
+                min="0"
+                max="100"
+                step="2"
+                value={output.audio.defaultPlaybackDevice?.volume ?? 0}
+                onChange={(e) =>
+                  output.audio?.setVolume(e.target.valueAsNumber)
+                }
+              />
+            )}
+            <span
+              style={{ marginLeft: '5px', cursor: 'pointer' }}
+              onClick={() => setShowSlider((prev) => !prev)}
+            >
+              {getAudioIcon(output.audio.defaultPlaybackDevice?.volume)}
+              {output.audio.defaultPlaybackDevice?.volume ?? 0}%
+            </span>
+          </div>
+        )}
+
+        {/*
+                {output.network && (
+                  <div className="network">
+                    {getNetworkIcon(output.network)}
+                    <small>{output.network.defaultGateway?.ssid}</small>
+                    </div>
+                  )}
+                    */}
+
+        {output.network && (
+          <div
+            className="network"
+            style={{ display: 'flex', alignItems: 'center' }}
+          >
+            {getNetworkIcon(output.network)}
+            <div className="speed-container">
+              <div className="speed-row">
+                <i
+                  className="nf nf-md-download"
+                  style={{ fontSize: '12px', margin: 0 }}
+                ></i>
+                {convertSpeed(output.network.traffic?.received.bytes)}
+              </div>
+              <div className="speed-row">
+                <i
+                  className="nf nf-md-upload"
+                  style={{ fontSize: '12px', margin: 0 }}
+                ></i>
+                {convertSpeed(output.network.traffic?.transmitted.bytes)}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {output.memory && (
+          <div
+            className="memory"
+            style={{ display: 'flex', alignItems: 'center' }}
+          >
+            <i className="nf nf-fae-chip"></i>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <div>
+                {(output.memory.usedMemory / 1024 ** 3).toFixed(1)}
+                <small> GB</small>
+              </div>
+              <div>
+                {(output.memory.totalMemory / 1024 ** 3).toFixed(1)}
+                <small> GB</small>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {output.cpu && (
+          <div className="cpu">
+            <i className="nf nf-oct-cpu"></i>
+
+            <span className={output.cpu.usage > 85 ? 'high-usage' : ''}>
+              {Math.round(output.cpu.usage)}%
+            </span>
+          </div>
+        )}
+
+        {output.battery && (
+          <div className="battery">
+            {/* Show icon for whether battery is charging. */}
+            {output.battery.state === 'charging' ? (
+              <i className="nf nf-md-lightning_bolt charging-icon"></i>
+            ) : output.battery.state === 'full' ? (
+              <i className="nf nf-md-power_plug charging-icon"></i>
+            ) : null}
+            <span
+              className={output.battery.chargePercent < 21 ? 'red' : 'green'}
+            >
+              {getBatteryIcon(output.battery)}
+            </span>
+            {Math.round(output.battery.chargePercent)}%
+          </div>
+        )}
+
+        {output.weather ? (
+          <div
+            className="weather"
+            style={{ display: 'flex', alignItems: 'center' }}
+          >
+            {getWeatherIcon(output.weather)}
+            <span>{Math.round(output.weather.fahrenheitTemp)}°F</span>
+          </div>
+        ) : (
+          <span className="weather" style={{ marginLeft: '10px' }}>
+            N/A
+          </span>
+        )}
+        {output.date && (
+          <div
+            className="date"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              textAlign: 'center',
+              whiteSpace: 'pre-line',
+            }}
+          >
+            <i className="nf nf-md-calendar_month"></i>
+            <span>{output.date?.formatted}</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,233 @@
+/**
+ * Import the Nerdfonts icon font.
+ * Ref https://www.nerdfonts.com/cheat-sheet for a cheatsheet of available Nerdfonts icons.
+ */
+@import 'https://www.nerdfonts.com/assets/css/webfont.css';
+
+i {
+  color: #cba6f7;
+  margin-right: 7px;
+  font-size: 1rem;
+}
+
+body {
+  color: rgb(205, 214, 244);
+  font-family: JetBrainsMono Nerd Font Mono, MesloLGS Nerd Font Mono,
+    ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: bold;
+  overflow: hidden;
+}
+
+div,
+span,
+p {
+  cursor: default;
+  user-select: none;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+#root {
+  border-bottom: 1px solid rgb(24, 24, 27);
+  background: #1e1e2e;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 2.1fr auto auto;
+  align-items: center;
+  height: 100%;
+  padding: 4px 1.5vw;
+}
+
+/* .app {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 4px 1.5w;
+  margin-left: 20px;
+  height: 100%;
+} */
+
+.left,
+.center,
+.right {
+  display: flex;
+  align-items: center;
+}
+
+.left {
+  justify-self: start;
+}
+
+.center {
+  justify-self: center;
+}
+
+.right {
+  justify-self: end;
+}
+
+.logo,
+.binding-mode,
+.tiling-direction,
+.paused-button,
+.audio,
+.network,
+.memory,
+.cpu,
+.weather {
+  margin-right: 15px;
+}
+
+.memory i {
+  color: #fab387;
+}
+
+.network i {
+  color: #89b4fa;
+}
+
+.audio i {
+  color: #f38ba8;
+}
+
+.cpu i {
+  color: #b4befe;
+}
+
+.logo {
+  font-size: 1.2rem;
+}
+
+.weather i {
+  font-size: 1.75rem;
+  margin-right: 0;
+  color: #f9e2af;
+}
+
+.date i {
+  color: #eba0ac;
+}
+
+.workspaces {
+  display: flex;
+  align-items: center;
+}
+
+.workspace {
+  background: rgb(49, 50, 68);
+  margin-right: 4px;
+  padding: 4px 8px;
+  color: rgb(205 214 244);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &.displayed {
+    background: rgb(49, 50, 68);
+  }
+
+  &.focused,
+  &:hover {
+    background: #cba6f7;
+    color: #1e1e2e;
+  }
+}
+
+.binding-mode,
+.tiling-direction,
+.paused-button {
+  background: rgb(49, 50, 68);
+  color: rgb(205 214 244);
+  border-radius: 4px;
+  line-height: 1;
+  padding: 4px 8px;
+  border: 0;
+  cursor: pointer;
+}
+
+.binding-mode {
+  margin-right: 4px;
+}
+
+.cpu .high-usage {
+  color: #900029;
+}
+
+.cpu span {
+  min-width: 25px;
+  display: inline-block;
+  text-align: right;
+  padding-right: 2px;
+}
+
+.battery {
+  position: relative;
+  margin-right: 10px;
+}
+
+.battery .charging-icon {
+  position: absolute;
+  font-size: 9px;
+  left: -9px;
+  top: -1px;
+}
+
+.title {
+  color: #f38ba8;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limit to 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+
+  line-clamp: 2; /* Compatibility */
+}
+
+.green i {
+  color: #a6e3a1 !important;
+}
+
+.red i {
+  color: #f38ba8 !important;
+}
+
+.network .speed-value {
+  min-width: 65px;
+  display: inline-block;
+  text-align: right;
+  margin-left: 4px;
+}
+
+.network .speed-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 75px;
+}
+
+.network .speed-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.systray-button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0 4px;
+  cursor: pointer;
+}
+
+.systray-button img {
+  width: 16px;
+  height: 16px;
+}

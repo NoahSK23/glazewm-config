@@ -1,15 +1,17 @@
 {
   "$schema": "https://github.com/glzr-io/zebar/raw/v3.1.1/resources/zpack-schema.json",
-  "name": "catppuccin-buildless",
+  "name": "catppuccin",
   "version": "0.0.0",
   "description": "",
   "tags": [],
-  "previewImages": [],
+  "previewImages": [
+    "./resources/preview-image-1.png"
+  ],
   "repositoryUrl": "",
   "widgets": [
     {
-      "name": "custom",
-      "htmlPath": "./custom.html",
+      "name": "catppuccin",
+      "htmlPath": "dist/index.html",
       "zOrder": "normal",
       "shownInTaskbar": false,
       "focused": false,
@@ -38,7 +40,7 @@
           },
           "dockToEdge": {
             "enabled": false,
-            "edge": "top",
+            "edge": null,
             "windowMargin": "0px"
           }
         }
