@@ -156,6 +156,8 @@ window_rules:
         window_class: { regex: 'HwndWrapper\[PowerToys\.PowerAccent.*?\]' }
       - window_process: { equals: 'PowerToys' }
         window_title: { regex: '.*? - Peek' }
+      - window_process: { equals: 'Raycast' }
+        window_title: { regex: 'Raycast' }
       - window_process: { equals: 'Lively' }
         window_class: { regex: 'HwndWrapper' }
       - window_process: { equals: 'Lenovo Legion Toolkit' }
